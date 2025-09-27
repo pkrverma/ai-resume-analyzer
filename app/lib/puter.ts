@@ -99,8 +99,52 @@ interface PuterStore {
 const getPuter = (): typeof window.puter | null =>
     typeof window !== "undefined" && window.puter ? window.puter : null;
 
+// AI Model configurations with priority and capabilities
+const AI_MODELS = {
+    // Premium models (best quality)
+    premium: [
+        { name: "claude-3-5-sonnet-20241022", provider: "Anthropic", tier: "premium" },
+        { name: "gpt-4o", provider: "OpenAI", tier: "premium" },
+        { name: "claude-3-7-sonnet", provider: "Anthropic", tier: "premium" },
+    ],
+    // Balanced models (good quality, better availability)
+    balanced: [
+        { name: "gpt-4o-mini", provider: "OpenAI", tier: "balanced" },
+        { name: "claude-3-haiku-20240307", provider: "Anthropic", tier: "balanced" },
+        { name: "gemini-1.5-pro", provider: "Google", tier: "balanced" },
+        { name: "gemini-1.5-flash", provider: "Google", tier: "balanced" },
+    ],
+    // Free tier friendly models
+    freeTier: [
+        { name: "llama-3.1-405b-instruct", provider: "Meta", tier: "free" },
+        { name: "llama-3.1-70b-instruct", provider: "Meta", tier: "free" },
+        { name: "mistral-large-latest", provider: "Mistral", tier: "free" },
+        { name: "qwen2.5-72b-instruct", provider: "Qwen", tier: "free" },
+    ]
+};
+
+// Get models in order of preference for different use cases
+const getModelList = (useCase: 'feedback' | 'chat' = 'chat'): string[] => {
+    if (useCase === 'feedback') {
+        // For feedback, prioritize quality over speed
+        return [
+            ...AI_MODELS.premium.map(m => m.name),
+            ...AI_MODELS.balanced.map(m => m.name),
+            ...AI_MODELS.freeTier.map(m => m.name)
+        ];
+    } else {
+        // For general chat, prioritize speed and availability
+        return [
+            ...AI_MODELS.balanced.map(m => m.name),
+            ...AI_MODELS.freeTier.map(m => m.name),
+            ...AI_MODELS.premium.map(m => m.name)
+        ];
+    }
+};
+
 export const usePuterStore = create<PuterStore>((set, get) => {
     const setError = (msg: string) => {
+        console.error("[Puter Store] Error occurred:", msg);
         set({
             error: msg,
             isLoading: false,
@@ -158,9 +202,9 @@ export const usePuterStore = create<PuterStore>((set, get) => {
                 return false;
             }
         } catch (err) {
-            const msg =
-                err instanceof Error ? err.message : "Failed to check auth status";
-            setError(msg);
+            const technicalMsg = err instanceof Error ? err.message : "Failed to check auth status";
+            console.error("[Auth] Authentication check failed:", technicalMsg);
+            setError("Unable to verify your login status. Please try refreshing the page.");
             return false;
         }
     };
@@ -178,8 +222,9 @@ export const usePuterStore = create<PuterStore>((set, get) => {
             await puter.auth.signIn();
             await checkAuthStatus();
         } catch (err) {
-            const msg = err instanceof Error ? err.message : "Sign in failed";
-            setError(msg);
+            const technicalMsg = err instanceof Error ? err.message : "Sign in failed";
+            console.error("[Auth] Sign in attempt failed:", technicalMsg);
+            setError("Unable to sign in. Please try again or check your connection.");
         }
     };
 
@@ -207,8 +252,9 @@ export const usePuterStore = create<PuterStore>((set, get) => {
                 isLoading: false,
             });
         } catch (err) {
-            const msg = err instanceof Error ? err.message : "Sign out failed";
-            setError(msg);
+            const technicalMsg = err instanceof Error ? err.message : "Sign out failed";
+            console.error("[Auth] Sign out attempt failed:", technicalMsg);
+            setError("Unable to sign out. Please try again.");
         }
     };
 
@@ -236,8 +282,9 @@ export const usePuterStore = create<PuterStore>((set, get) => {
                 isLoading: false,
             });
         } catch (err) {
-            const msg = err instanceof Error ? err.message : "Failed to refresh user";
-            setError(msg);
+            const technicalMsg = err instanceof Error ? err.message : "Failed to refresh user";
+            console.error("[Auth] User refresh failed:", technicalMsg);
+            setError("Unable to update your account information. Please try signing in again.");
         }
     };
 
@@ -260,7 +307,8 @@ export const usePuterStore = create<PuterStore>((set, get) => {
         setTimeout(() => {
             clearInterval(interval);
             if (!getPuter()) {
-                setError("Puter.js failed to load within 10 seconds");
+                console.error("[Init] Puter.js failed to load within timeout period");
+                setError("Application failed to initialize. Please refresh the page.");
             }
         }, 10000);
     };
@@ -321,10 +369,68 @@ export const usePuterStore = create<PuterStore>((set, get) => {
             setError("Puter.js not available");
             return;
         }
-        // return puter.ai.chat(prompt, imageURL, testMode, options);
-        return puter.ai.chat(prompt, imageURL, testMode, options) as Promise<
-            AIResponse | undefined
-        >;
+
+        // Get models optimized for general chat
+        let models = getModelList('chat');
+
+        // If specific model is requested in options, try that first
+        if (options?.model || (typeof imageURL === 'object' && imageURL?.model)) {
+            const requestedModel = options?.model || (typeof imageURL === 'object' ? imageURL?.model : undefined);
+            if (requestedModel) {
+                // Put requested model first, then fallback to others
+                models = [requestedModel, ...models.filter(m => m !== requestedModel)];
+            }
+        }
+
+        // Try each model in sequence until one succeeds
+        for (let i = 0; i < models.length; i++) {
+            const model = models[i];
+            const modelInfo = [...AI_MODELS.premium, ...AI_MODELS.balanced, ...AI_MODELS.freeTier]
+                .find(m => m.name === model);
+            
+            console.log(`[AI Chat] Attempting ${modelInfo?.provider} ${model} (${modelInfo?.tier}) - ${i + 1}/${models.length}`);
+            
+            try {
+                // Create options with current model
+                let currentOptions: PuterChatOptions;
+                if (typeof imageURL === 'object') {
+                    currentOptions = { ...imageURL, model };
+                } else {
+                    currentOptions = { ...options, model };
+                }
+
+                const response = await puter.ai.chat(prompt, typeof imageURL === 'string' ? imageURL : currentOptions, testMode, currentOptions);
+                console.log(`[AI Chat] Successfully connected to ${modelInfo?.provider} ${model}`);
+                return response as AIResponse | undefined;
+            } catch (error) {
+                const errorMsg = error instanceof Error ? error.message : String(error);
+                console.warn(`[AI Chat] ${modelInfo?.provider} ${model} failed: ${errorMsg}`);
+                
+                // Check if it's a rate limit or quota error
+                const isRateLimit = errorMsg.toLowerCase().includes('rate') || 
+                                   errorMsg.toLowerCase().includes('quota') || 
+                                   errorMsg.toLowerCase().includes('limit') ||
+                                   errorMsg.toLowerCase().includes('usage');
+                
+                if (isRateLimit) {
+                    console.log(`[AI Chat] Rate limit reached for ${model}, switching to backup model`);
+                } else {
+                    console.log(`[AI Chat] Connection failed for ${model}, trying alternative provider`);
+                }
+                
+                // If this is the last model, throw the error
+                if (i === models.length - 1) {
+                    console.error(`[AI Chat] All AI providers exhausted. Final error from ${model}:`, error);
+                    setError("AI service is currently unavailable. Please try again in a few minutes.");
+                    throw new Error("AI service temporarily unavailable");
+                }
+                
+                // Add shorter delay for chat (more responsive)
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+        }
+        
+        return undefined;
     };
 
     const feedback = async (path: string, message: string) => {
@@ -334,24 +440,74 @@ export const usePuterStore = create<PuterStore>((set, get) => {
             return;
         }
 
-        return puter.ai.chat(
-            [
-                {
-                    role: "user",
-                    content: [
-                        {
-                            type: "file",
-                            puter_path: path,
-                        },
-                        {
-                            type: "text",
-                            text: message,
-                        },
-                    ],
-                },
-            ],
-            { model: "claude-sonnet-4" }
-        ) as Promise<AIResponse | undefined>;
+        // Get models optimized for feedback analysis
+        const models = getModelList('feedback');
+        
+        const chatPayload: ChatMessage[] = [
+            {
+                role: "user" as const,
+                content: [
+                    {
+                        type: "file",
+                        puter_path: path,
+                    },
+                    {
+                        type: "text",
+                        text: message,
+                    },
+                ],
+            },
+        ];
+
+        // Try each model in sequence until one succeeds
+        for (let i = 0; i < models.length; i++) {
+            const model = models[i];
+            const modelInfo = [...AI_MODELS.premium, ...AI_MODELS.balanced, ...AI_MODELS.freeTier]
+                .find(m => m.name === model);
+            
+            console.log(`[AI Analysis] Attempting ${modelInfo?.provider} ${model} (${modelInfo?.tier}) - ${i + 1}/${models.length}`);
+            
+            try {
+                const response = await puter.ai.chat(chatPayload, { model });
+                console.log(`[AI Analysis] Successfully connected to ${modelInfo?.provider} ${model}`);
+                return response as AIResponse | undefined;
+            } catch (error) {
+                const errorMsg = error instanceof Error ? error.message : String(error);
+                console.warn(`[AI Analysis] ${modelInfo?.provider} ${model} failed: ${errorMsg}`);
+                
+                // Check if it's a rate limit or quota error
+                const isRateLimit = errorMsg.toLowerCase().includes('rate') || 
+                                   errorMsg.toLowerCase().includes('quota') || 
+                                   errorMsg.toLowerCase().includes('limit') ||
+                                   errorMsg.toLowerCase().includes('usage');
+                
+                const isServerError = errorMsg.toLowerCase().includes('server') ||
+                                     errorMsg.toLowerCase().includes('503') ||
+                                     errorMsg.toLowerCase().includes('502') ||
+                                     errorMsg.toLowerCase().includes('timeout');
+                
+                if (isRateLimit) {
+                    console.log(`[AI Analysis] Rate limit reached for ${model}, switching to backup provider`);
+                } else if (isServerError) {
+                    console.log(`[AI Analysis] Server error detected for ${model}, trying alternative service`);
+                } else {
+                    console.log(`[AI Analysis] Connection failed for ${model}, attempting fallback provider`);
+                }
+                
+                // If this is the last model, throw the error
+                if (i === models.length - 1) {
+                    console.error(`[AI Analysis] All AI providers exhausted. Final error from ${model}:`, error);
+                    setError("Resume analysis service is currently unavailable. Please try again later.");
+                    throw new Error("Resume analysis temporarily unavailable");
+                }
+                
+                // Add exponential backoff delay for better reliability
+                const delay = Math.min(1000 * Math.pow(2, Math.min(i, 4)), 5000);
+                await new Promise(resolve => setTimeout(resolve, delay));
+            }
+        }
+        
+        return undefined;
     };
 
     const img2txt = async (image: string | File | Blob, testMode?: boolean) => {
