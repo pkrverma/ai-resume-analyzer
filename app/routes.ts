@@ -4,6 +4,7 @@ export default [
   index("routes/home.tsx"), 
   route('/auth', 'routes/auth.tsx'), 
   route('/upload', 'routes/upload.tsx'),
+  route('/resume/:id', 'routes/resume.tsx'),
   // Catch-all route for unmatched paths (including DevTools requests)
   route('*', 'routes/404.tsx')
 ] satisfies RouteConfig;
