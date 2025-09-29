@@ -6,6 +6,7 @@ import Navbar from "~/components/Navbar";
 import { convertPdfToImage } from "~/lib/pdf2img";
 import { usePuterStore } from "~/lib/puter";
 import { generateUUID } from "~/lib/utils";
+import Footer from "~/components/Footer";
 
 const upload = () => {
   const { auth, isLoading, fs, ai, kv } = usePuterStore();
@@ -87,9 +88,9 @@ const upload = () => {
     handleAnalayze({ companyName, jobTitle, jobDescription, file });
   };
   return (
-    <main className="bg-[url('/images/bg-main.svg')] bg-cover">
+    <main className="bg-[url('/images/bg-main.svg')] bg-cover min-h-screen flex flex-col">
       <Navbar />
-      <section className="main-section">
+      <section className="main-section flex-grow">
         <div className="page-heading py-16">
           <h1>Smart feedback for your dream job</h1>
           {isProcessing ? (
@@ -144,6 +145,7 @@ const upload = () => {
           )}
         </div>
       </section>
+      <Footer />
     </main>
   );
 };

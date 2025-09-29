@@ -4,6 +4,7 @@ import { usePuterStore, exportDeleteKV } from "~/lib/puter";
 import Loading from "~/components/Loading";
 import ErrorPage from "~/components/ErrorPage";
 import Notification from "~/components/Notification";
+import Footer from "~/components/Footer";
 
 const WipeApp = () => {
   const { auth, isLoading, error, clearError, fs, ai, kv } = usePuterStore();
@@ -218,7 +219,7 @@ const WipeApp = () => {
   }
 
   return (
-    <main className="bg-[url('/images/bg-main.svg')] bg-cover min-h-screen !pt-0">
+    <main className="bg-[url('/images/bg-main.svg')] bg-cover min-h-screen !pt-0 flex flex-col">
       {/* Back to Homepage Navigation */}
       <nav className="resume-nav">
         <Link to="/" className="back-button bg-white">
@@ -238,7 +239,7 @@ const WipeApp = () => {
         />
       )}
       
-      <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="max-w-6xl mx-auto px-4 py-8 flex-grow">
         <div className="bg-white rounded-lg shadow-lg p-6">
           <h1 className="text-2xl font-bold mb-6">Resume Management</h1>
 
@@ -350,6 +351,7 @@ const WipeApp = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </main>
   );
 };

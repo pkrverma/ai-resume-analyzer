@@ -4,9 +4,10 @@ import ATS from "~/components/ATS";
 import Details from "~/components/Details";
 import Summary from "~/components/Summary";
 import { usePuterStore } from "~/lib/puter";
+import Footer from "~/components/Footer";
 
 export const meta = () => [
-  { title: "ResumeRadar | Review" },
+  { title: "Recruit Mind | Review" },
   { name: "description", content: "Detailed overview of your resume" },
 ];
 
@@ -49,7 +50,7 @@ const resume = () => {
   }, [id]);
 
   return (
-    <main className="!pt-0">
+    <main className="!pt-0 min-h-screen flex flex-col">
       <nav className="resume-nav">
         <Link to="/" className="back-button">
           <img src="/icons/back.svg" alt="logo" className="w-2.5 h-2.5" />
@@ -58,7 +59,7 @@ const resume = () => {
           </span>
         </Link>
       </nav>
-      <div className="flex flex-row w-full max-lg:flex-col-reverse">
+      <div className="flex flex-row w-full max-lg:flex-col-reverse flex-grow">
         <section className="feedback-section min-h-[100dvh] bg-[url('/images/bg-small.svg')] bg-cover w-[100vw] sticky top-0 flex items-center justify-start overflow-hidden">
           {imageUrl && resumeUrl && (
             <div className="animate-in fade-in duration-1000 gradient-border max-sm:m-0 max-h-[90%] max-w-full w-fit overflow-hidden">
@@ -86,6 +87,7 @@ const resume = () => {
           )}
         </section>
       </div>
+      <Footer />
     </main>
   );
 };

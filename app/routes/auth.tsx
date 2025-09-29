@@ -1,10 +1,11 @@
 export const meta = () => [
-  { title: "ResumeRadar | Auth" },
+  { title: "Recruit Mind | Auth" },
   { name: "description", content: "Log into your account" },
 ];
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { usePuterStore } from "~/lib/puter";
+import Footer from "~/components/Footer";
 
 const auth = () => {
   const { isLoading, auth } = usePuterStore();
@@ -35,8 +36,9 @@ const auth = () => {
   };
 
   return (
-    <main className="bg-[url('/images/bg-auth.svg')] bg-cover min-h-screen flex items-center justify-center">
-      <div className="gradient-border shadow-lg">
+    <main className="bg-[url('/images/bg-auth.svg')] bg-cover min-h-screen flex flex-col">
+      <div className="flex-grow flex items-center justify-center">
+        <div className="gradient-border shadow-lg">
         <section className="flex flex-col gap-8 bg-white rounded-2xl p-10">
           <div className="flex flex-col items-center gap-2 text-center">
             <h1>Welcome</h1>
@@ -66,7 +68,9 @@ const auth = () => {
             )}
           </div>
         </section>
+        </div>
       </div>
+      <Footer />
     </main>
   );
 };

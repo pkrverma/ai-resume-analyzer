@@ -22,8 +22,8 @@ const ErrorPage: React.FC<ErrorPageProps> = ({
   };
 
   return (
-    <main className={`bg-[url('/images/bg-main.svg')] bg-cover min-h-screen ${className}`}>
-      <div className="flex items-center justify-center min-h-screen">
+    <main className={`bg-[url('/images/bg-main.svg')] bg-cover min-h-screen flex flex-col ${className}`}>
+      <div className="flex items-center justify-center flex-grow">
         <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full mx-4">
           <div className="text-center">
             <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">

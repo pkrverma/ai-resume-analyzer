@@ -6,10 +6,11 @@ import { usePuterStore } from "~/lib/puter";
 import { Link, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import resume from "./resume";
+import Footer from "~/components/Footer";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "ResumeRadar " },
+    { title: "Recruit Mind " },
     { name: "description", content: "Smart feedback for your deam job!" },
   ];
 }
@@ -73,12 +74,12 @@ export default function Home() {
 
 
   return (
-    <main className="bg-[url('/images/bg-main.svg')] bg-cover">
+    <main className="bg-[url('/images/bg-main.svg')] bg-cover min-h-screen flex flex-col">
       <Navbar />
       
 
       
-      <section className="main-section">
+      <section className="main-section flex-grow">
         <div className="page-heading py-8">
           <h1>Track Your Applications & Resume Ratings</h1>
           {!loadingResume && resumes.length === 0 ? (
@@ -115,6 +116,7 @@ export default function Home() {
           </div>
         )}
       </section>
+      <Footer />
     </main>
   );
 }
