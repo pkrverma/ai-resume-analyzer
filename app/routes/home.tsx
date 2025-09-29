@@ -24,26 +24,62 @@ export default function Home() {
     if (!auth.isAuthenticated) navigate("/auth?next=/");
   }, [auth.isAuthenticated]);
 
-  useEffect(() => {
-    const loadResumes = async () => {
+  const loadResumes = async () => {
+    try {
       setLoadingResume(true);
 
-      const resume = (await kv.list("resume:*", true)) as KVItem[];
-      const parsedResumes = resume?.map(
-        (resume) => JSON.parse(resume.value) as Resume
-      );
-      console.log("parsedResumes", parsedResumes);
-      setResumes(parsedResumes || []);
+      const resumeData = (await kv.list("resume:*", true)) as KVItem[];
+      
+      if (!resumeData || resumeData.length === 0) {
+        console.log("No resumes found in database");
+        setResumes([]);
+        return;
+      }
+      
+      // Parse and validate resume data
+      const parsedResumes = resumeData
+        .map((item) => {
+          try {
+            const resume = JSON.parse(item.value) as Resume;
+            // Validate that required fields exist
+            if (resume.id && resume.feedback) {
+              return resume;
+            } else {
+              console.warn(`Invalid resume data for key ${item.key}:`, resume);
+              return null;
+            }
+          } catch (error) {
+            console.error(`Failed to parse resume data for key ${item.key}:`, error);
+            return null;
+          }
+        })
+        .filter((resume): resume is Resume => resume !== null);
+      
+      console.log(`Loaded ${parsedResumes.length} valid resumes from database`);
+      setResumes(parsedResumes);
+      
+    } catch (error) {
+      console.error("Error loading resumes:", error);
+      setResumes([]);
+    } finally {
       setLoadingResume(false);
-    };
+    }
+  };
+
+  useEffect(() => {
     loadResumes();
   }, []);
+
+
 
   return (
     <main className="bg-[url('/images/bg-main.svg')] bg-cover">
       <Navbar />
+      
+
+      
       <section className="main-section">
-        <div className="page-heading py-16">
+        <div className="page-heading py-8">
           <h1>Track Your Applications & Resume Ratings</h1>
           {!loadingResume && resumes.length === 0 ? (
             <h2>No resumes found. Upload your first resume to get feedback.</h2>
@@ -57,11 +93,21 @@ export default function Home() {
           </div>
         )}
         {!loadingResume && resumes.length > 0 && (
-          <div className="resumes-section">
-            {resumes.map((resume) => (
-              <ResumeCard key={resume.id} resume={resume} />
-            ))}
-          </div>
+          <>
+            <div className="w-full flex justify-end mb-6 -mr-8">
+              <Link 
+                to="/wipe"
+                className="px-6 py-2 rounded-lg font-medium bg-red-50 text-red-700 border border-red-200 hover:bg-red-100 transition-colors"
+              >
+                Manage Resumes
+              </Link>
+            </div>
+            <div className="resumes-section">
+              {resumes.map((resume) => (
+                <ResumeCard key={resume.id} resume={resume} />
+              ))}
+            </div>
+          </>
         )}
         {!loadingResume && resumes.length === 0 && (
           <div className="flex flex-col items-center justify-center mt-10 gap-4">

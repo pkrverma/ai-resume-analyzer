@@ -85,7 +85,7 @@ form {
   }
 
   .main-section {
-    @apply flex flex-col items-center gap-8 pt-12 max-sm:mx-2 mx-15 pb-5;
+    @apply flex flex-col items-center pt-12 max-sm:mx-2 mx-15 pb-5;
   }
 
   .page-heading {
@@ -97,7 +97,7 @@ form {
   }
 
   .resume-card {
-    @apply flex flex-col gap-8 h-[560px] w-[350px] lg:w-[350px] xl:w-[490px] bg-white rounded-2xl p-4;
+    @apply flex flex-col gap-2 h-fit w-[350px] lg:w-[350px] xl:w-[490px] bg-white rounded-2xl p-4;
   }
 
   .resume-card-header {

@@ -543,7 +543,18 @@ export const usePuterStore = create<PuterStore>((set, get) => {
             setError("Puter.js not available");
             return;
         }
-        return puter.kv.delete(key);
+        // Try different possible method names for delete
+        if (typeof puter.kv.delete === 'function') {
+            return puter.kv.delete(key);
+        } else if (typeof (puter.kv as any).del === 'function') {
+            return (puter.kv as any).del(key);
+        } else if (typeof (puter.kv as any).remove === 'function') {
+            return (puter.kv as any).remove(key);
+        } else {
+            console.error("No delete method found on puter.kv:", Object.keys(puter.kv));
+            setError("KV delete operation not supported");
+            return false;
+        }
     };
 
     const listKV = async (pattern: string, returnValues?: boolean) => {
@@ -610,3 +621,23 @@ export const usePuterStore = create<PuterStore>((set, get) => {
         clearError: () => set({ error: null }),
     };
 });
+
+// Export utility functions for direct use
+export const exportDeleteKV = async (key: string) => {
+    const puter = (window as any).puter;
+    if (!puter) {
+        console.error("Puter.js not available");
+        return false;
+    }
+    // Try different possible method names for delete
+    if (typeof puter.kv.delete === 'function') {
+        return puter.kv.delete(key);
+    } else if (typeof (puter.kv as any).del === 'function') {
+        return (puter.kv as any).del(key);
+    } else if (typeof (puter.kv as any).remove === 'function') {
+        return (puter.kv as any).remove(key);
+    } else {
+        console.error("No delete method found on puter.kv:", Object.keys(puter.kv));
+        return false;
+    }
+};

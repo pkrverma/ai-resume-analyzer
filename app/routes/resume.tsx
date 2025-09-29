@@ -59,7 +59,7 @@ const resume = () => {
         </Link>
       </nav>
       <div className="flex flex-row w-full max-lg:flex-col-reverse">
-        <section className="feedback-section bg-[url('/images/bg-small.svg')] bg-cover w-[100vw] sticky top-0 flex items-center justify-start overflow-hidden">
+        <section className="feedback-section min-h-[100dvh] bg-[url('/images/bg-small.svg')] bg-cover w-[100vw] sticky top-0 flex items-center justify-start overflow-hidden">
           {imageUrl && resumeUrl && (
             <div className="animate-in fade-in duration-1000 gradient-border max-sm:m-0 max-h-[90%] max-w-full w-fit overflow-hidden">
               <a href={resumeUrl} target="_blank" rel="noreferrer">
