@@ -59,13 +59,13 @@ const resume = () => {
         </Link>
       </nav>
       <div className="flex flex-row w-full max-lg:flex-col-reverse">
-        <section className="feedback-section bg-[url('/images/bg-small.svg')] bg-cover h-[100vh] sticky top-0 items-center justify-center">
+        <section className="feedback-section bg-[url('/images/bg-small.svg')] bg-cover w-[100vw] sticky top-0 flex items-center justify-start overflow-hidden">
           {imageUrl && resumeUrl && (
-            <div className="animate-in fade-in duration-1000 gradient-border max-sm:m-0 h-[90%] max-2xl:h-fit w-fit">
+            <div className="animate-in fade-in duration-1000 gradient-border max-sm:m-0 max-h-[90%] max-w-full w-fit overflow-hidden">
               <a href={resumeUrl} target="_blank" rel="noreferrer">
                 <img
                   src={imageUrl}
-                  className="w-full h-full object-contain rounded-2xl"
+                  className="max-w-full max-h-full object-contain rounded-2xl"
                   title="resume"
                   alt=""
                 />
@@ -74,11 +74,11 @@ const resume = () => {
           )}
         </section>
         <section className="feedback-section">
-          <h2 className="text-4xl !text-black font-bold">Resume Review</h2>
+          <h2 className="text-3xl !text-black font-bold">Resume Review</h2>
           {feedback ? (
             <div className="flex flex-col gap-8 animate-in fade-in duration-1000">
               <Summary feedback={feedback}/>
-              <ATS score={feedback.ATS.score || 0} suggestion={feedback.padStart.tips || []}/>
+              <ATS score={feedback.ATS.score || 0} suggestions={feedback.ATS.tips || []}/>
               <Details feedback = {feedback} />
             </div>
           ) : (

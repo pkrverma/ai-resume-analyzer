@@ -28,9 +28,9 @@ export default function NotFound() {
       <Navbar />
       <section className="main-section">
         <div className="page-heading py-16 text-center">
-          <h1 className="text-6xl font-bold mb-4">404</h1>
-          <h2 className="text-2xl mb-8">Page Not Found</h2>
-          <p className="text-lg text-gray-600 mb-8">
+          <h1 className="text-5xl font-bold mb-4">404</h1>
+          <h2 className="text-lg mb-8">Page Not Found</h2>
+          <p className="text-base text-gray-600 mb-8">
             The page you're looking for doesn't exist.
           </p>
           <a 
