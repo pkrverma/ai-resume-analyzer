@@ -42,11 +42,6 @@ const auth = () => {
         <section className="flex flex-col gap-8 bg-white rounded-2xl p-10 max-w-md mx-4">
           <div className="flex flex-col items-center gap-4 text-center">
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-12 h-12 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm1 2a1 1 0 000 2h6a1 1 0 100-2H7zM7 8a1 1 0 000 2h6a1 1 0 100-2H7zm0 4a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
-                </svg>
-              </div>
               <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                 Recruit Mind
               </h1>
@@ -111,9 +106,7 @@ const auth = () => {
                 ) : (
                   <button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 min-h-[3rem] px-4 py-3 rounded-lg font-medium text-white w-fit mx-auto" onClick={handleSignIn}>
                     <div className="flex items-center justify-center gap-2 flex-wrap">
-                      <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
+                      
                       <span className="font-medium text-sm text-center leading-tight">Continue to Recruit Mind</span>
                     </div>
                   </button>
