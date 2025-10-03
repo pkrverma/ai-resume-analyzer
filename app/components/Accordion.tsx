@@ -98,7 +98,7 @@ export const AccordionHeader: React.FC<AccordionHeaderProps> = ({
 
   const defaultIcon = (
     <svg
-      className={cn("w-5 h-5 transition-transform duration-200", {
+      className={cn("w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-200", {
         "rotate-180": isActive,
       })}
       fill="none"
@@ -123,13 +123,13 @@ export const AccordionHeader: React.FC<AccordionHeaderProps> = ({
     <button
       onClick={handleClick}
       className={`
-        w-full px-4 py-3 text-left
+        w-full px-3 sm:px-4 py-2 sm:py-3 text-left
         focus:outline-none
         transition-colors duration-200 flex items-center justify-between cursor-pointer
         ${className}
       `}
     >
-      <div className="flex items-center space-x-3">
+      <div className="flex items-center space-x-2 sm:space-x-3">
         {iconPosition === "left" && (icon || defaultIcon)}
         <div className="flex-1">{children}</div>
       </div>
@@ -160,7 +160,7 @@ export const AccordionContent: React.FC<AccordionContentProps> = ({
         ${className}
       `}
     >
-      <div className="px-4 py-3">{children}</div>
+      <div className="px-3 sm:px-4 py-2 sm:py-3">{children}</div>
     </div>
   );
 };

@@ -105,7 +105,11 @@ form {
   }
 
   .feedback-section {
-    @apply flex flex-col gap-8 w-1/2 px-8 max-lg:w-full py-6;
+    @apply flex flex-col gap-8 w-1/2 px-8 max-lg:w-full py-6 max-lg:min-h-[100dvh] max-lg:px-4 max-lg:py-4;
+  }
+
+  .resume-image-section {
+    @apply bg-[url('/images/bg-small.svg')] bg-cover w-1/2 max-lg:w-full flex items-center justify-center px-4 py-6 lg:min-h-[100dvh] lg:sticky lg:top-0 max-lg:h-fit max-lg:px-2 max-lg:py-4;
   }
 
   .navbar-container {

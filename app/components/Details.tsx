@@ -25,7 +25,7 @@ const ScoreBadge = ({ score }: { score: number }) => {
       />
       <p
         className={cn(
-          "text-sm font-medium",
+          "text-xs sm:text-sm font-medium",
           score > 69
             ? "text-badge-green-text"
             : score > 39
@@ -48,7 +48,7 @@ const CategoryHeader = ({
 }) => {
   return (
     <div className="flex flex-row gap-4 items-center py-2">
-      <p className="text-base font-semibold">{title}</p>
+      <p className="text-sm sm:text-base md:text-lg font-semibold">{title}</p>
       <ScoreBadge score={categoryScore} />
     </div>
   );
@@ -71,7 +71,7 @@ const CategoryContent = ({
               alt="score"
               className="size-5"
             />
-            <p className="text-base text-gray-500 ">{tip.tip}</p>
+            <p className="text-xs sm:text-sm md:text-base text-gray-500">{tip.tip}</p>
           </div>
         ))}
       </div>
@@ -80,7 +80,7 @@ const CategoryContent = ({
           <div
             key={index + tip.tip}
             className={cn(
-              "flex flex-col gap-2 rounded-2xl p-4",
+              "flex flex-col gap-2 rounded-2xl p-3 sm:p-4",
               tip.type === "good"
                 ? "bg-green-50 border border-green-200 text-green-700"
                 : "bg-yellow-50 border border-yellow-200 text-yellow-700"
@@ -94,11 +94,11 @@ const CategoryContent = ({
                     : "/icons/warning.svg"
                 }
                 alt="score"
-                className="size-5"
+                className="w-4 h-4 sm:w-5 sm:h-5"
               />
-              <p className="text-base font-semibold">{tip.tip}</p>
+              <p className="text-sm sm:text-base md:text-lg font-semibold">{tip.tip}</p>
             </div>
-            <p>{tip.explanation}</p>
+            <p className="text-xs sm:text-sm md:text-base">{tip.explanation}</p>
           </div>
         ))}
       </div>

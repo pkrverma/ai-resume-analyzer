@@ -13,10 +13,10 @@ const Category = ({ title, score }: { title: string; score: number }) => {
     <div className="resume-summary">
       <div className="category">
         <div className="flex flex-row gap-2 items-center justify-center">
-          <p className="text-lg">{title}</p>
+          <p className="text-sm sm:text-base md:text-lg">{title}</p>
           <ScoreBadge score={score} />
         </div>
-          <p className="text-lg">
+          <p className="text-sm sm:text-base md:text-lg">
             <span className={textColor}>{score}</span>/100
           </p>
       </div>
@@ -25,12 +25,12 @@ const Category = ({ title, score }: { title: string; score: number }) => {
 };const Summary = ({ feedback }: { feedback: Feedback }) => {
   return (
     <div className="bg-white rounded-2xl shadow-md w-full">
-      <div className="flex flex-row items-center p-4 gap-8">
+      <div className="flex flex-col md:flex-row items-center p-4 gap-4">
         <ScoreGauge score={feedback.overallScore} />
 
-        <div className="flex flex-col gap-2">
-          <h2 className="text-lg font-bold">Your Resume Score</h2>
-          <p className="text-sm text-gray-500">
+        <div className="flex flex-col gap-2 text-center">
+          <h2 className="text-base sm:text-lg md:text-xl font-bold pt-1">Your Resume Score</h2>
+          <p className="text-xs sm:text-md md:text-base text-gray-500">
             This score is calculated based on factors listed below.
           </p>
         </div>

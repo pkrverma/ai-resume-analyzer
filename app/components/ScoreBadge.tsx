@@ -30,7 +30,7 @@ const ScoreBadge = ({ score }: ScoreBadgeProps) => {
   const { bgColor, textColor, label } = getBadgeStyles();
 
   return (
-    <div className={`${bgColor} ${textColor} px-3 py-1 rounded-full text-sm font-medium`}>
+    <div className={`${bgColor} ${textColor} px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium`}>
       <p>{label}</p>
     </div>
   );
