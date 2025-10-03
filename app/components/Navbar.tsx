@@ -29,19 +29,28 @@ const Navbar = () => {
     }, []);
 
     return (
-        <nav className="navbar">
-            <Link to="/">
-                <p className="text-2xl font-bold text-gradient">Recruit Mind</p>
-            </Link>
-            <div className="flex items-center gap-4">
-                <Link to="/upload" className="primary-button w-fit mr-2">
-                    Upload Resume
+        <div className="navbar-container">
+            <nav className="navbar">
+                <Link to="/" className="flex items-center gap-2 sm:gap-3 min-w-0">
+                    <img 
+                        src="/favicon.ico" 
+                        alt="Recruit Mind" 
+                        className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 flex-shrink-0" 
+                    />
+                    <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-bold text-gradient truncate">
+                        Recruit Mind
+                    </p>
+                </Link>
+            <div className="flex items-center gap-2 sm:gap-3 md:gap-4 flex-shrink-0">
+                <Link to="/upload" className="primary-button w-fit text-xs sm:text-sm md:text-base px-3 sm:px-4 py-2">
+                    <span className="hidden sm:inline">Upload Resume</span>
+                    <span className="sm:hidden">Upload</span>
                 </Link>
                 {auth.isAuthenticated && (
                     <div className="relative" ref={dropdownRef}>
                         <button
                             onClick={() => setShowDropdown(!showDropdown)}
-                            className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold hover:shadow-lg transition-shadow"
+                            className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold hover:shadow-lg transition-shadow text-sm sm:text-base flex-shrink-0"
                         >
                             {auth.user?.username?.charAt(0).toUpperCase() || "U"}
                         </button>
@@ -65,6 +74,7 @@ const Navbar = () => {
                 )}
             </div>
         </nav>
+        </div>
     );
 };
 

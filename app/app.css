@@ -24,15 +24,15 @@ body {
 }
 
 main {
-  @apply min-h-screen pt-10;
+  @apply min-h-screen md:pt-10 pt-4;
 }
 
 h1 {
-  @apply max-sm:text-[2.5rem] text-5xl text-gradient leading-tight xl:tracking-[-2px] font-semibold;
+  @apply text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl text-gradient leading-tight xl:tracking-[-2px] font-semibold;
 }
 
 h2 {
-  @apply max-sm:text-lg text-2xl text-dark-200;
+  @apply text-sm sm:text-base md:text-lg lg:text-xl xl:text-xl text-dark-200;
 }
 
 label {
@@ -61,7 +61,7 @@ form {
   }
 
   .primary-button {
-    @apply primary-gradient text-white rounded-full px-4 py-2 cursor-pointer w-full;
+    @apply primary-gradient text-white rounded-full px-4 py-2 cursor-pointer w-full font-medium whitespace-nowrap;
   }
 
   .resume-nav {
@@ -81,23 +81,23 @@ form {
   }
 
   .auth-button {
-    @apply primary-gradient rounded-full py-4 px-8 cursor-pointer w-[600px] max-md:w-full text-2xl font-semibold text-white;
+    @apply primary-gradient rounded-full py-3 sm:py-4 px-6 sm:px-8 cursor-pointer w-full max-w-[600px] text-base sm:text-lg md:text-xl lg:text-2xl font-semibold text-white;
   }
 
   .main-section {
-    @apply flex flex-col items-center pt-12 max-sm:mx-2 mx-15 pb-5;
+    @apply flex flex-col items-center pt-8 sm:pt-10 md:pt-12 mx-4 sm:mx-6 md:mx-8 lg:mx-12 xl:mx-16 pb-5;
   }
 
   .page-heading {
-    @apply flex flex-col items-center gap-8 max-w-4xl text-center max-sm:gap-4;
+    @apply flex flex-col items-center gap-4 sm:gap-6 md:gap-8 max-w-4xl text-center mx-2 sm:mx-4;
   }
 
   .resumes-section {
-    @apply flex flex-wrap max-md:flex-col max-md:gap-4 gap-6 items-start max-md:items-center w-full max-w-[1850px] justify-evenly;
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 w-full max-w-[1200px] mx-2 sm:mx-4;
   }
 
   .resume-card {
-    @apply flex flex-col gap-2 h-fit w-[350px] lg:w-[350px] xl:w-[490px] bg-white rounded-2xl p-4;
+    @apply flex flex-col gap-2 h-fit w-full max-w-[350px] mx-auto bg-white rounded-2xl p-4;
   }
 
   .resume-card-header {
@@ -108,8 +108,12 @@ form {
     @apply flex flex-col gap-8 w-1/2 px-8 max-lg:w-full py-6;
   }
 
+  .navbar-container {
+    @apply w-full flex justify-center px-4;
+  }
+
   .navbar {
-    @apply flex flex-row justify-between items-center bg-white rounded-full p-4 w-full px-10 max-w-[1200px] mx-auto;
+    @apply flex flex-row justify-between items-center bg-white rounded-full py-3 sm:py-4 px-4 sm:px-6 md:px-8 lg:px-10 w-full max-w-[1200px] min-h-[60px] sm:min-h-[64px];
   }
 
   .score-badge {
