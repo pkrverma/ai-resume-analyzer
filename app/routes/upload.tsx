@@ -349,7 +349,7 @@ const upload = () => {
                 <label htmlFor="uploader" className="block text-sm font-medium text-gray-700 mb-1">
                   Upload Resume {errors.file && <span className="text-red-500">*</span>}
                 </label>
-                <div className={`w-full ${errors.file ? 'border-red-500' : valid.file ? 'border-green-500' : 'border-gray-300'} border rounded-md`}>
+                <div id="upload-area" className={`w-full ${errors.file ? 'border-red-500' : valid.file ? 'border-green-500' : 'border-gray-300'} border rounded-md`}>
                   <FileUploader onFileSelect={handleFileSelect} />
                 </div>
                 {errors.file && (

@@ -95,7 +95,7 @@ export default function Home() {
         )}
         {!loadingResume && resumes.length > 0 && (
           <>
-            <div className="w-full flex justify-end mb-4 sm:mb-6 mx-2 sm:mx-0">
+            <div id="manage-resumes-section" className="w-full flex justify-end mb-4 sm:mb-6 mx-2 sm:mx-0">
               <Link 
                 to="/wipe"
                 className="px-4 sm:px-6 py-2 rounded-lg font-medium bg-red-50 text-red-700 border border-red-200 hover:bg-red-100 transition-colors text-sm sm:text-base"
