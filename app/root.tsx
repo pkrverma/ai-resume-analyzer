@@ -55,7 +55,7 @@ export default function App() {
   const { showOnboarding, startOnboarding, closeOnboarding, completeOnboarding } = useOnboarding();
 
   useEffect(() => {
-    // Listen for custom event from Navbar to start onboarding
+    // Listen for custom event from Navbar to start onboarding (manual trigger)
     const handleStartOnboarding = () => {
       startOnboarding();
     };
@@ -69,6 +69,7 @@ export default function App() {
   return (
     <>
       <Outlet />
+      {/* Global onboarding guide for manual triggers from navbar */}
       <OnboardingGuide 
         isOpen={showOnboarding}
         onClose={closeOnboarding}

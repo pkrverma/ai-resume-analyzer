@@ -7,6 +7,8 @@ import { Link, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import resume from "./resume";
 import Footer from "~/components/Footer";
+import { useOnboarding } from "~/lib/useOnboarding";
+import OnboardingGuide from "~/components/OnboardingGuide";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -23,6 +25,9 @@ export default function Home() {
   const [showFeedbackText, setShowFeedbackText] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
   const [hasInitialAnimationCompleted, setHasInitialAnimationCompleted] = useState(false);
+  const [resumesLoaded, setResumesLoaded] = useState(false);
+  
+  const { showOnboarding, startOnboarding, closeOnboarding, completeOnboarding } = useOnboarding();
 
   useEffect(() => {
     if (!auth.isAuthenticated) navigate("/auth?next=/");
@@ -45,7 +50,6 @@ export default function Home() {
       const resumeData = (await kv.list("resume:*", true)) as KVItem[];
       
       if (!resumeData || resumeData.length === 0) {
-        console.log("No resumes found in database");
         setResumes([]);
         return;
       }
@@ -59,30 +63,60 @@ export default function Home() {
             if (resume.id && resume.feedback) {
               return resume;
             } else {
-              console.warn(`Invalid resume data for key ${item.key}:`, resume);
               return null;
             }
           } catch (error) {
-            console.error(`Failed to parse resume data for key ${item.key}:`, error);
             return null;
           }
         })
         .filter((resume): resume is Resume => resume !== null);
       
-      console.log(`Loaded ${parsedResumes.length} valid resumes from database`);
       setResumes(parsedResumes);
       
     } catch (error) {
-      console.error("Error loading resumes:", error);
       setResumes([]);
     } finally {
       setLoadingResume(false);
+      setResumesLoaded(true);
     }
   };
 
   useEffect(() => {
     loadResumes();
   }, []);
+
+  // Check for onboarding after resumes are loaded
+  useEffect(() => {
+    if (resumesLoaded && resumes.length === 0 && auth.isAuthenticated && auth.user?.username) {
+      // Only show onboarding if user has no resume history
+      const checkOnboarding = async () => {
+        if (!auth.user?.username) return; // Additional null check
+        
+        const userOnboardingKey = `onboarding_completed:${auth.user.username}`;
+        try {
+          const kvCompleted = await kv.get(userOnboardingKey);
+          const localCompleted = localStorage.getItem(userOnboardingKey);
+          
+          if (kvCompleted !== 'true' && localCompleted !== 'true') {
+            // User hasn't completed onboarding and has no resumes, show tutorial
+            setTimeout(() => {
+              startOnboarding();
+            }, 1000);
+          }
+        } catch (error) {
+          // Fallback to localStorage check only
+          const localCompleted = localStorage.getItem(userOnboardingKey);
+          if (localCompleted !== 'true') {
+            setTimeout(() => {
+              startOnboarding();
+            }, 1000);
+          }
+        }
+      };
+      
+      checkOnboarding();
+    }
+  }, [resumesLoaded, resumes.length, auth.isAuthenticated, auth.user?.username, kv, startOnboarding]);
 
 
 
@@ -160,6 +194,13 @@ export default function Home() {
           </span>
         </button>
       </div>
+
+      {/* Onboarding Guide - only shown for users with no resume history */}
+      <OnboardingGuide 
+        isOpen={showOnboarding}
+        onClose={closeOnboarding}
+        onComplete={completeOnboarding}
+      />
 
       <Footer />
     </main>

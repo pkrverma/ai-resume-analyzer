@@ -38,25 +38,15 @@ export const useOnboarding = () => {
         // User hasn't completed onboarding
         setIsFirstTime(true);
         
-        // Show onboarding after a short delay to ensure UI is ready
-        const timer = setTimeout(() => {
-          setShowOnboarding(true);
-        }, 1000);
-
-        return () => clearTimeout(timer);
+        // Don't auto-show onboarding, let components decide when to show it
         
       } catch (error) {
-        console.error('Error checking onboarding status:', error);
-        
         // Fallback to localStorage only
         const localCompleted = localStorage.getItem(`${ONBOARDING_COMPLETED_KEY}:${auth.user.username}`);
         
         if (localCompleted !== 'true') {
           setIsFirstTime(true);
-          const timer = setTimeout(() => {
-            setShowOnboarding(true);
-          }, 1000);
-          return () => clearTimeout(timer);
+          // Don't auto-show onboarding, let components decide when to show it
         }
       }
     };
@@ -74,7 +64,6 @@ export const useOnboarding = () => {
       await kv.set(userOnboardingKey, 'true');
       localStorage.setItem(userOnboardingKey, 'true');
     } catch (error) {
-      console.error('Error saving onboarding completion:', error);
       // Fallback to localStorage only
       localStorage.setItem(userOnboardingKey, 'true');
     }
@@ -101,7 +90,6 @@ export const useOnboarding = () => {
       await kv.delete(userOnboardingKey);
       localStorage.removeItem(userOnboardingKey);
     } catch (error) {
-      console.error('Error resetting onboarding:', error);
       localStorage.removeItem(userOnboardingKey);
     }
 
