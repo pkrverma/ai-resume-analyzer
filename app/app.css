@@ -610,26 +610,188 @@ form {
   }
 }
 
-/* Mobile responsiveness */
-@media (max-width: 768px) {
+/* Mobile responsiveness - Small screens (up to 640px) */
+@media (max-width: 640px) {
   .feedback-button {
-    bottom: 20px;
-    right: 20px;
+    bottom: 16px;
+    right: 16px;
+    min-height: 48px;
   }
   
   .feedback-button.expanded {
-    width: 140px;
-    padding: 0 16px 0 12px;
+    width: 150px;
+    padding: 0 14px 0 10px;
+  }
+  
+  .feedback-button.collapsed {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .feedback-icon {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .feedback-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .feedback-text {
+    font-size: 12px;
+    left: 38px;
+    right: 10px;
+    font-weight: 600;
+  }
+  
+  .feedback-text.visible {
+    max-width: fit-content;
+  }
+}
+
+/* Tablet responsiveness - Medium screens (641px to 768px) */
+@media (min-width: 641px) and (max-width: 768px) {
+  .feedback-button {
+    bottom: 20px;
+    right: 20px;
+    min-height: 52px;
+  }
+  
+  .feedback-button.expanded {
+    width: 155px;
+    padding: 0 18px 0 14px;
+  }
+  
+  .feedback-button.collapsed {
+    width: 52px;
+    height: 52px;
+  }
+  
+  .feedback-icon {
+    width: 22px;
+    height: 22px;
+  }
+  
+  .feedback-icon svg {
+    width: 22px;
+    height: 22px;
   }
   
   .feedback-text {
     font-size: 13px;
-    left: 44px;
-    right: 12px;
-    max-width: 80px;
+    left: 48px;
+    right: 14px;
+    font-weight: 500;
   }
   
   .feedback-text.visible {
-    max-width: 80px;
+    max-width: fit-content;
+  }
+}
+
+/* Large tablet and small desktop - Medium-large screens (769px to 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .feedback-button {
+    bottom: 24px;
+    right: 24px;
+    min-height: 54px;
+  }
+  
+  .feedback-button.expanded {
+    width: 170px;
+    padding: 0 19px 0 15px;
+  }
+  
+  .feedback-button.collapsed {
+    width: 54px;
+    height: 54px;
+  }
+  
+  .feedback-icon {
+    width: 23px;
+    height: 23px;
+  }
+  
+  .feedback-icon svg {
+    width: 23px;
+    height: 23px;
+  }
+  
+  .feedback-text {
+    font-size: 13.5px;
+    left: 50px;
+    right: 15px;
+    font-weight: 500;
+  }
+  
+  .feedback-text.visible {
+    max-width: fit-content;
+  }
+}
+
+/* Desktop and larger screens (1025px and up) */
+@media (min-width: 1025px) {
+  .feedback-button {
+    bottom: 24px;
+    right: 24px;
+  }
+  
+  .feedback-text.visible {
+    max-width: 110px;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .feedback-button {
+    /* Increase touch target size for better accessibility */
+    min-height: 56px;
+  }
+  
+  .feedback-button.collapsed {
+    width: 56px;
+    height: 56px;
+  }
+  
+  /* Remove hover effects on touch devices */
+  .feedback-button:hover {
+    transform: scale(1);
+    background: linear-gradient(to right, #3b82f6, #9333ea);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+  
+  /* Add active/tap state for touch feedback */
+  .feedback-button:active {
+    transform: scale(0.95);
+    transition: transform 0.1s ease-in-out;
+  }
+}
+
+/* High DPI screens (Retina displays) */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .feedback-button {
+    /* Ensure crisp rendering on high DPI screens */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .feedback-button,
+  .feedback-text,
+  .feedback-button::before,
+  .feedback-button::after {
+    animation: none;
+    transition: none;
+  }
+  
+  .feedback-button:hover {
+    transform: none;
+  }
+  
+  .feedback-button:active {
+    transform: none;
   }
 }
