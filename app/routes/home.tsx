@@ -20,10 +20,23 @@ export default function Home() {
   const navigate = useNavigate();
   const [resumes, setResumes] = useState<Resume[]>([]);
   const [loadingResume, setLoadingResume] = useState(false);
+  const [showFeedbackText, setShowFeedbackText] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
+  const [hasInitialAnimationCompleted, setHasInitialAnimationCompleted] = useState(false);
 
   useEffect(() => {
     if (!auth.isAuthenticated) navigate("/auth?next=/");
   }, [auth.isAuthenticated]);
+
+  // Feedback button animation effect
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowFeedbackText(false);
+      setHasInitialAnimationCompleted(true);
+    }, 3000); // Show text for 3 seconds
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const loadResumes = async () => {
     try {
@@ -116,6 +129,38 @@ export default function Home() {
           </div>
         )}
       </section>
+
+      {/* Feedback Button */}
+      <div className="fixed bottom-6 right-6 z-50">
+        <button
+          onClick={() => window.open('https://forms.gle/YOUR_GOOGLE_FORM_ID', '_blank')}
+          onMouseEnter={() => hasInitialAnimationCompleted && setIsHovered(true)}
+          onMouseLeave={() => hasInitialAnimationCompleted && setIsHovered(false)}
+          className={`feedback-button ${
+            showFeedbackText || isHovered ? 'expanded' : 'collapsed'
+          }`}
+          title="Share your feedback"
+        >
+          <div className="feedback-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2ZM20 16H5.17L4 17.17V4H20V16Z"
+                fill="currentColor"
+              />
+              <path
+                d="M7 9H17V11H7V9ZM7 12H17V14H7V12ZM7 6H17V8H7V6Z"
+                fill="currentColor"
+              />
+            </svg>
+          </div>
+          <span className={`feedback-text ${
+            showFeedbackText || isHovered ? 'visible' : 'hidden'
+          }`}>
+            Share Feedback
+          </span>
+        </button>
+      </div>
+
       <Footer />
     </main>
   );

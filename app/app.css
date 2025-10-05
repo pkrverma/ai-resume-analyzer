@@ -470,3 +470,166 @@ form {
     font-size: 14px;
   }
 }
+
+/* Feedback Button Styles */
+.feedback-button {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  background: linear-gradient(to right, #3b82f6, #9333ea);
+  color: white;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transform: scale(1);
+  cursor: pointer;
+  border: 0;
+  outline: none;
+  border-radius: 50px;
+  min-height: 56px;
+  position: relative;
+  overflow: hidden;
+}
+
+.feedback-button.expanded {
+  width: 180px;
+  padding: 0 20px 0 16px;
+  justify-content: flex-start;
+}
+
+.feedback-button.collapsed {
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border-radius: 50%;
+  justify-content: center;
+}
+
+.feedback-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  z-index: 2;
+  position: relative;
+}
+
+.feedback-text {
+  font-weight: 500;
+  font-size: 14px;
+  white-space: nowrap;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: absolute;
+  left: 52px;
+  right: 16px;
+  overflow: hidden;
+}
+
+.feedback-text.visible {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  width: auto;
+  max-width: fit-content;
+}
+
+.feedback-text.hidden {
+  opacity: 0;
+  transform: translateX(-20px) scale(0.8);
+  width: 0;
+  max-width: 0;
+}
+
+.feedback-button:hover {
+  background: linear-gradient(to right, #2563eb, #7c3aed);
+  box-shadow: 0 20px 25px -5px rgba(59, 130, 246, 0.25), 0 10px 10px -5px rgba(147, 51, 234, 0.15);
+  transform: scale(1.02) translateY(-2px);
+}
+
+.feedback-button:active {
+  transform: translateY(0px) scale(0.98);
+  transition: all 0.1s ease-in-out;
+}
+
+/* Pulse animation for collapsed state when not hovered */
+.feedback-button.collapsed:not(:hover)::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 50%;
+  background: rgba(59, 130, 246, 0.3);
+  animation: pulse-ring 3s infinite;
+  z-index: 0;
+}
+
+/* Enhanced pulse animation with better timing */
+.feedback-button.collapsed:not(:hover)::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border-radius: 50%;
+  background: rgba(147, 51, 234, 0.2);
+  animation: pulse-ring 3s infinite 1.5s;
+  z-index: 0;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+
+/* Initial fade-in animation */
+.feedback-button {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .feedback-button {
+    bottom: 20px;
+    right: 20px;
+  }
+  
+  .feedback-button.expanded {
+    width: 140px;
+    padding: 0 16px 0 12px;
+  }
+  
+  .feedback-text {
+    font-size: 13px;
+    left: 44px;
+    right: 12px;
+    max-width: 80px;
+  }
+  
+  .feedback-text.visible {
+    max-width: 80px;
+  }
+}
